@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="list_fragment_label">First Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_list_fragment">Hello first fragment</string>
+
+    <!-- Floating button description -->
+    <string name="floating_button_description">Botão para adicionar uma nova anotação</string>
+</resources>
