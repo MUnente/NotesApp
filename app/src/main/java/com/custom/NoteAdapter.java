@@ -13,8 +13,9 @@ import java.util.ArrayList;
 
 public class NoteAdapter extends BaseAdapter {
 
-    private Context context;
+    final private Context context;
     private ArrayList<Note> notes;
+    private ArrayList<Integer> ids = new ArrayList<>();
 
     public NoteAdapter(Context context, ArrayList<Note> notes) {
         this.context = context;
@@ -47,10 +48,16 @@ public class NoteAdapter extends BaseAdapter {
         TextView title = (TextView) convertView.findViewById(android.R.id.text1);
         title.setText(note.getTitle());
 
+        ids.add(note.getId());
+
         return convertView;
     }
 
     public void setNotes(ArrayList<Note> notes) {
         this.notes = notes;
+    }
+
+    public ArrayList<Integer> getArrayIds() {
+        return this.ids;
     }
 }

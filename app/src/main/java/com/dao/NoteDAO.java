@@ -32,6 +32,8 @@ public class NoteDAO {
 
         query += " ORDER BY date DESC";
 
+        System.out.println("MAMA MINHA PIKA");
+
         try {
             this.database = this.dbconnection.connect(this.context);
 
@@ -40,6 +42,7 @@ public class NoteDAO {
             while (cursor.moveToNext()) {
                 Note note = new Note();
 
+                System.out.println(cursor.getString(0));
                 note.setId(Integer.parseInt(cursor.getString(0)));
                 note.setTitle(cursor.getString(1));
                 note.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(cursor.getString(2)));
@@ -59,18 +62,45 @@ public class NoteDAO {
         }
     }
 
-    public void insertNote() {
-        // refazer método!
-        String query = "INSERT INTO note (title, date, description) VALUES " +
-                "('Teste 1', '2022-10-13 23:59:59', 'Este é o primeiro teste para fazer alguma coisa'), " +
-                "('Teste 2', '2022-10-10 14:54:32', 'Foi bem no primeiro dia de trabalho'), " +
-                "('Teste 3', '2021-07-23 15:00:11', 'Neste momento eu estava sem saber que horas eram, se eu ainda iria continuar bem ou não... Esse dia marcou a minha vida (se eu acertei o dia)');";
+    public void insertNote(Note note) {
+        String query = "INSERT INTO note (title, date, description) VALUES (?, ?, ?)";
+
+        System.out.println("FILHO DA PUTA");
+        System.out.println(note.getTitle());
 
         try {
             this.database = this.dbconnection.connect(this.context);
 
             SQLiteStatement stmt = this.database.compileStatement(query);
+            stmt.bindString(1, note.getTitle());
+            stmt.bindString(2, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(note.getDate()));
+            stmt.bindString(3, note.getDescription());
+
             stmt.executeInsert();
+
+            this.dbconnection.disconnect(this.database);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateNote(Note note) {
+        String query = "UPDATE note SET title = ?, date = ?, description = ? WHERE id = ?";
+
+        System.out.println("VAI TOMA NO CU");
+        System.out.println(note.getTitle());
+
+        try {
+            this.database = this.dbconnection.connect(this.context);
+
+            SQLiteStatement stmt = this.database.compileStatement(query);
+            stmt.bindString(1, note.getTitle());
+            stmt.bindString(2, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(note.getDate()));
+            stmt.bindString(3, note.getDescription());
+            stmt.bindLong(4, note.getId());
+
+            stmt.executeUpdateDelete();
 
             this.dbconnection.disconnect(this.database);
         }
@@ -81,6 +111,8 @@ public class NoteDAO {
 
     public void deleteNote(int id) {
         String query = "DELETE FROM note WHERE id = ?";
+        System.out.println("ARROMBADO");
+        System.out.println(id);
 
         try {
             this.database = this.dbconnection.connect(this.context);

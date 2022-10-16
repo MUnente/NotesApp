@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView lstNotes;
     private FloatingActionButton fabAddNote;
 
+    private ArrayList<Integer> note_ids;
+
+    // Procedures
     private void fillList() {
         ArrayList<Note> notes;
         NoteAdapter adapter = new NoteAdapter(MainActivity.this, null);
@@ -31,31 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setNotes(notes);
         this.lstNotes.setAdapter(adapter);
+
+        this.note_ids = adapter.getArrayIds();
     }
     
-    private void deleteItem(int position) {
+    private void deleteItem(int id) {
         NoteDAO noteDAO = new NoteDAO(this);
-        noteDAO.deleteNote(position);
+        noteDAO.deleteNote(id);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        this.lstNotes = findViewById(R.id.lstNotes);
-        this.fabAddNote = findViewById(R.id.fabAddNote);
-
-        fillList();
-
-        this.lstNotes.setOnItemClickListener(this::onItemClick);
-        this.lstNotes.setOnItemLongClickListener(this::onItemLongClick);
-        this.fabAddNote.setOnClickListener(this::onClick);
-    }
-
+    // Event Listeners
     private void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         Intent intentAddNewNote = new Intent(this, NoteActivity.class);
-        intentAddNewNote.putExtra("noteId", position+1);
+        intentAddNewNote.putExtra("noteId", note_ids.get(position));
         startActivity(intentAddNewNote);
     }
 
@@ -66,10 +57,7 @@ public class MainActivity extends AppCompatActivity {
         alertBuilder.setMessage(R.string.sure_about_that);
 
         alertBuilder.setPositiveButton(R.string.confirm_delete_note, (dialogInterface, i) -> {
-            System.out.println(position);
-            System.out.println(i);
-
-            deleteItem(position);
+            deleteItem(note_ids.get(position));
             Snackbar.make(view, R.string.sucessfully_note_deletion, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             fillList();
         });
@@ -85,5 +73,21 @@ public class MainActivity extends AppCompatActivity {
         Intent intentAddNewNote = new Intent(this, NoteActivity.class);
         intentAddNewNote.putExtra("noteId", -1);
         startActivity(intentAddNewNote);
+    }
+
+    // Main
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        this.lstNotes = findViewById(R.id.lstNotes);
+        this.fabAddNote = findViewById(R.id.fabAddNote);
+
+        fillList();
+
+        this.lstNotes.setOnItemClickListener(this::onItemClick);
+        this.lstNotes.setOnItemLongClickListener(this::onItemLongClick);
+        this.fabAddNote.setOnClickListener(this::onClick);
     }
 }
