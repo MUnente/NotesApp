@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">NoteApp</string>
+
+    <!-- Dialog delete note -->
+    <string name="sure_about_that">Você tem certeza que deseja excluir essa anotação?</string>
+    <string name="title_delete_note">Excluir anotação</string>
+
+    <string name="confirm_delete_note">Excluir</string>
+    <string name="cancel_delete_note">Cancelar</string>
+
+    <string name="sucessfully_note_deletion">Anotação excluída com sucesso</string>
+
+    <string name="save_note">Salvar</string>
+
 </resources>
